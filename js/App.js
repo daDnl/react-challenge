@@ -12,8 +12,9 @@ export const App = (props) => {
 
   const [activeUserData, setActiveUserData] = useState(null);
 
-  const [sortParam, setSortParam] = useState(null);
   const [sortOrder, setSortOrder] = useState(null);
+  const [sortParam, setSortParam] = useState(null);
+
   const [filter, setFilter] = useState('');
 
   const selectUser = useCallback((id) => {
@@ -22,6 +23,15 @@ export const App = (props) => {
 
   const handleSearchChange = useCallback((e) => {
     setFilter(e.target.value);
+  });
+
+  const handleSortChange = useCallback((order, param) => {
+    if(sortOrder) {
+      setSortOrder(order === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortOrder(order);
+    }
+    setSortParam(param);
   });
 
   useEffect(() => {
@@ -48,10 +58,16 @@ export const App = (props) => {
   } else {
     return (
       <div className="container app">
-        <SearchBar value={filter} onChange={handleSearchChange} />
-        <Toolbar />
         <div className="row">
-          <UserList users={users} sort={ { param: sortParam, order: sortOrder } } filter={filter} activeUser={activeUserData} selectUser={selectUser} />
+          <SearchBar value={filter} onChange={handleSearchChange} />
+        </div>
+
+        <div className="row">
+          <Toolbar sortParam={sortParam} sortOrder={sortOrder} onSortChange={handleSortChange} />
+        </div >
+
+        <div className="row">
+          <UserList users={users} sortParam={sortParam} sortOrder={sortOrder} filter={filter} activeUser={activeUserData} selectUser={selectUser} />
           <ActiveUser user={activeUserData} />
         </div>
       </div>

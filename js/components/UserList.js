@@ -3,12 +3,13 @@ import { UserData } from './UserData';
 
 
 export const UserList = (props) => {
-  const { users, sort, filter, selectUser, activeUser } = props;
+  const { users, sortParam, sortOrder, filter, selectUser, activeUser } = props;
+  const [isLoaded, setIsLoaded] = useState(false);
   const [userList, setUserList] = useState(users);
-  const [userComponents, setUserComponents] = useState([]);
+
 
   const filterUsers = (users, query) => {
-    let nums = query.match(/\d+/g);
+    const nums = query.match(/\d+/g);
     if (nums) {
       users = users.filter((user) =>
         user.name.toLowerCase().includes(query.toLowerCase())
@@ -19,54 +20,65 @@ export const UserList = (props) => {
         user.name.toLowerCase().includes(query.toLowerCase())
       );
     }
+    
     return users;
   }
 
-  /*const sortUsers = (users, sort) => {
-
-  }*/
-  
-  const buildComponents = (users) => {
-    return (
-      users.map((user) =>
-        <UserData
-          key={user.id.toString()}
-          id={user.id}
-          name={user.name}
-          age={user.age}
-          phone={user.phone}
-          image={user.image}
-          onUserClick={handleUserClick}
-          selected={user.id == activeUser.id ? true : false}
-        />
-      )
-    );
+  const sortUsers = (users, sortParam, sortOrder) => {
+    console.log('sort users called')
+    if(sortParam === 'name') {
+      return sortOrder === 'asc' ? users.sort((a, b) => a.name.localeCompare(b.name)) :
+        users.sort((a, b) => b.name.localeCompare(a.name)) ;
+    } else if(sortParam === 'age') {
+      return sortOrder === 'asc' ? users.sort((a, b) => parseFloat(a.age) - parseFloat(b.age)) :
+        users.sort((a, b) => parseFloat(b.age) - parseFloat(a.age));
+    }
   }
 
   const handleUserClick = (id) => {
-    //setUserComponents(userComponents.find(userData => userData.id))
     selectUser(id);
   }
 
   useEffect(() => {
-    if (filter) {
-      setUserList(filterUsers(users, filter));
-      if (!userList.find(user => user.id == activeUser.id)) {
-        selectUser(userList[0].id);
+    let tmpUserList = [];
+    if(filter) {
+      const isUserInList = userList.find(user => user.id == activeUser.id);
+      tmpUserList = filterUsers(users, filter);
+      if(!isUserInList) {
+        const [firstUser] = userList;
+        selectUser(firstUser.id);
       }
     } else {
-      setUserComponents(buildComponents(userList));
+      tmpUserList = users;
     }
     
-  }, [users, sort, filter]);
+    
+    if(sortOrder && sortParam) {
+      tmpUserList = sortUsers(tmpUserList, sortParam, sortOrder);
+    }
+    
+    setUserList([...tmpUserList]);
+    setIsLoaded(true);
+  }, [users, sortParam, sortOrder, filter, activeUser]);
   
-  if(!userList) {
+  if(!isLoaded) {
     return <div>Загрузка...</div>;
   } else {
 
     return (
-      <div className="col-8">
-        {userComponents}
+      <div className="col-8 list-group rounded-0">
+        {userList.map((user) =>
+          <UserData
+            key={user.id.toString()}
+            id={user.id}
+            name={user.name}
+            age={user.age}
+            phone={user.phone}
+            image={user.image}
+            onUserClick={handleUserClick}
+            selected={user.id === activeUser.id}
+          />
+        )}
       </div>
     )
   }

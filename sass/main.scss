@@ -24,6 +24,57 @@
   color: #ccc;
 }
 
-.selected-row {
-  background-color: aqua;
+.list-group {
+  border-top: 0;
+  border-radius: 0;
+}
+
+.list-group-item.active {
+  color: white;
+  border-color: rgb(54, 149, 204);;
+  background-color: rgb(54, 149, 204);
+}
+
+.card {
+  border-top: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.btn-secondary {
+  background-color: white;
+  color: #495057;
+  width: auto;
+  border-right: 1px solid #ced4da;
+  border-radius: 0;
+  display: flex;
+  align-items: center;
+}
+
+.btn-active {
+  background-color: rgb(54, 149, 204);
+  color: white;
+}
+
+.arrow-icon {
+  font-weight: 900;
+  font-size: 2em
+}
+
+.btn-toolbar {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  overflow: hidden;
+}
+
+.btn-group .btn:last-child {
+  border: 0;
+}
+
+.vertical-text {
+  width: 1em;
+  word-break: break-all;
+  white-space: pre-wrap;
+  line-height: 0.9em;
+  align-self: flex-end;
 }

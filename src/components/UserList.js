@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { UserData } from './UserData';
+import { Loading } from './Loading'
 
 
 export const UserList = (props) => {
@@ -25,7 +26,6 @@ export const UserList = (props) => {
   }
 
   const sortUsers = (users, sortParam, sortOrder) => {
-    console.log('sort users called')
     if(sortParam === 'name') {
       return sortOrder === 'asc' ? users.sort((a, b) => a.name.localeCompare(b.name)) :
         users.sort((a, b) => b.name.localeCompare(a.name)) ;
@@ -42,10 +42,11 @@ export const UserList = (props) => {
   useEffect(() => {
     let tmpUserList = [];
     if(filter) {
-      const isUserInList = userList.find(user => user.id == activeUser.id);
       tmpUserList = filterUsers(users, filter);
-      if(!isUserInList) {
-        const [firstUser] = userList;
+
+      const isUserInList = tmpUserList.find(user => user.id == activeUser.id);
+      if(!isUserInList && tmpUserList) {
+        const [firstUser] = tmpUserList;
         selectUser(firstUser.id);
       }
     } else {
@@ -53,7 +54,7 @@ export const UserList = (props) => {
     }
     
     
-    if(sortOrder && sortParam) {
+    if(sortOrder && sortParam && tmpUserList) {
       tmpUserList = sortUsers(tmpUserList, sortParam, sortOrder);
     }
     
@@ -62,24 +63,31 @@ export const UserList = (props) => {
   }, [users, sortParam, sortOrder, filter, activeUser]);
   
   if(!isLoaded) {
-    return <div>Загрузка...</div>;
+    return <Loading />;
   } else {
-
-    return (
+    if(userList) {
+      return (
+        <div className="col-8 list-group rounded-0">
+          {userList.map((user) =>
+            <UserData
+              key={user.id.toString()}
+              id={user.id}
+              name={user.name}
+              age={user.age}
+              phone={user.phone}
+              image={user.image}
+              onUserClick={handleUserClick}
+              selected={user.id === activeUser.id}
+            />
+          )}
+        </div>
+      )
+    } else {
+      return (
       <div className="col-8 list-group rounded-0">
-        {userList.map((user) =>
-          <UserData
-            key={user.id.toString()}
-            id={user.id}
-            name={user.name}
-            age={user.age}
-            phone={user.phone}
-            image={user.image}
-            onUserClick={handleUserClick}
-            selected={user.id === activeUser.id}
-          />
-        )}
+        <h3 className="list-group-item list-group-item-action rounded-0">No users found by this request</h3>
       </div>
     )
+  }
   }
 }

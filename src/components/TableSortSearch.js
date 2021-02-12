@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { SearchBar } from './components/SearchBar';
-import { Toolbar } from './components/Toolbar';
-import { UserList } from './components/UserList';
-import { ActiveUser } from './components/ActiveUser';
+import { SearchBar } from './SearchBar';
+import { Toolbar } from './Toolbar';
+import { UserList } from './UserList';
+import { ActiveUser } from './ActiveUser';
+import { Loading } from './Loading'
 
 
-export const App = (props) => {
+export const TableSortSearch = (props) => {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [users, setUsers] = useState([]);
@@ -54,7 +55,7 @@ export const App = (props) => {
   if (error) {
     return <div>Ошибка: {error.message}</div>;
   } else if (!isLoaded) {
-    return <div>Загрузка...</div>;
+    return <Loading />;
   } else {
     return (
       <div className="container app">

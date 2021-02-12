@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { Loading } from './Loading'
 
 
 export const SortButton = (props) => {
-    const { active, order, param, onSortClick, type, label } = props;
+    const { active, order, param, onSortClick, type, label, showLoading } = props;
     const [isLoaded, setIsLoaded] = useState(false);
     const [labelFromTo, setlabelFromTo] = useState(null);
 
@@ -41,6 +42,6 @@ export const SortButton = (props) => {
         </button>
       )
     } else {
-      return <div>Загрузка...</div>
+      return <Loading />
     }
 }

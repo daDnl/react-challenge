@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { TableSortSearch } from './components/TableSortSearch'
+import React, { useEffect, useState } from 'react';
+import { TableSortSearch } from './components/TableSortSearch';
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import './App.css';
 
@@ -19,7 +20,27 @@ const App = () => {
         </div>
       </div>
 
-      <TableSortSearch/>
+
+      <Router>
+        <Switch>
+          <Route path="/search/:search/:active">
+            <TableSortSearch />
+          </Route>
+          <Route path="/sort/:sort/:active">
+            <TableSortSearch />
+          </Route>
+          <Route path="/:search/:sort/:active">
+            <TableSortSearch />
+          </Route>
+          <Route path="/:active">
+            <TableSortSearch />
+          </Route>
+          <Route path="/">
+            <TableSortSearch />
+          </Route>
+        </Switch>
+      </Router>
+      
     </div>
   );
 }

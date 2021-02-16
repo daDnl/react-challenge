@@ -27,7 +27,7 @@ export const SortButton = (props) => {
       
     }, [order, type, active]);
 
-    if(isLoaded) {
+    if (isLoaded) {
       return (
         <button
           type="button"

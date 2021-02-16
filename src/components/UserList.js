@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { UserData } from './UserData';
-import { Loading } from './Loading'
+import { Loading } from './Loading';
 
 
 export const UserList = (props) => {
   const { users, sortParam, sortOrder, filter, selectUser, activeUser } = props;
   const [isLoaded, setIsLoaded] = useState(false);
   const [userList, setUserList] = useState(users);
-
 
   const filterUsers = (users, query) => {
     const nums = query.match(/\d+/g);
@@ -26,10 +25,10 @@ export const UserList = (props) => {
   }
 
   const sortUsers = (users, sortParam, sortOrder) => {
-    if(sortParam === 'name') {
+    if (sortParam === 'name') {
       return sortOrder === 'asc' ? users.sort((a, b) => a.name.localeCompare(b.name)) :
         users.sort((a, b) => b.name.localeCompare(a.name)) ;
-    } else if(sortParam === 'age') {
+    } else if (sortParam === 'age') {
       return sortOrder === 'asc' ? users.sort((a, b) => parseFloat(a.age) - parseFloat(b.age)) :
         users.sort((a, b) => parseFloat(b.age) - parseFloat(a.age));
     }
@@ -41,20 +40,19 @@ export const UserList = (props) => {
 
   useEffect(() => {
     let tmpUserList = [];
-    if(filter) {
+    if (filter) {
       tmpUserList = filterUsers(users, filter);
 
       const isUserInList = tmpUserList.find(user => user.id == activeUser.id);
-      if(!isUserInList && tmpUserList) {
+      if (!isUserInList && tmpUserList.length) {
         const [firstUser] = tmpUserList;
         selectUser(firstUser.id);
       }
     } else {
       tmpUserList = users;
-    }
+    }   
     
-    
-    if(sortOrder && sortParam && tmpUserList) {
+    if (sortOrder && sortParam && tmpUserList.length) {
       tmpUserList = sortUsers(tmpUserList, sortParam, sortOrder);
     }
     
@@ -62,10 +60,10 @@ export const UserList = (props) => {
     setIsLoaded(true);
   }, [users, sortParam, sortOrder, filter, activeUser]);
   
-  if(!isLoaded) {
+  if (!isLoaded) {
     return <Loading />;
   } else {
-    if(userList) {
+    if (userList) {
       return (
         <div className="col-8 list-group rounded-0">
           {userList.map((user) =>

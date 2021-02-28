@@ -52,7 +52,7 @@ mocker()
     data => {
       const json = JSON.stringify(data.user);
       fs.writeFile(path, json, 'utf8', (err) => {
-        if(err) console.log(err.message)
+        if (err) console.log(err.message)
         else console.log('Data generated successfully');
       });
       

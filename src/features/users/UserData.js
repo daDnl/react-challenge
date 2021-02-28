@@ -1,13 +1,18 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Avatar } from './Avatar';
-
+import {
+  activeUserChange
+} from './usersSlice';
 
 export const UserData = (props) => {
-    const { id, image, name, age, phone, onUserClick, selected } = props;
+    const { id, image, name, age, phone, selected } = props;
     const className = 'list-group-item list-group-item-action rounded-0';
     
+    const dispatch = useDispatch();
+    
     const handleClick = () => {
-      onUserClick(id);
+      dispatch(activeUserChange(id));
     }
     
     return (
